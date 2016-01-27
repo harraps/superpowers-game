@@ -12,13 +12,13 @@ export default class CannonBodyMarkerUpdater {
 
     switch (this.config.shape) {
       case "box" :
-        this.bodyRenderer.setBox(this.config.halfSize);
+        this.bodyRenderer.setBox(this.config.orientation, this.config.halfSize);
         break;
       case "sphere" :
         this.bodyRenderer.setSphere(this.config.radius);
         break;
       case"cylinder":
-        this.bodyRenderer.setCylinder(this.config.radius, this.config.height);
+        this.bodyRenderer.setCylinder(this.config.orientation, this.config.radius, this.config.height, this.config.segments);
         break;
     }
     this.bodyRenderer.setOffset(this.config.offset);
@@ -27,8 +27,8 @@ export default class CannonBodyMarkerUpdater {
   destroy() { /* Ignore */ }
 
   config_setProperty(path: string, value: any) {
-    if (path.indexOf("halfSize") !== -1 || (path === "shape" && value === "box")) {
-      this.bodyRenderer.setBox(this.config.halfSize);
+    if ((path.indexOf("orientation") !== -1 && this.config.shape === "box") ||path.indexOf("halfSize") !== -1 || (path === "shape" && value === "box")) {
+      this.bodyRenderer.setBox(this.config.orientation, this.config.halfSize);
       this.bodyRenderer.setOffset(this.config.offset);
     }
 
@@ -36,8 +36,8 @@ export default class CannonBodyMarkerUpdater {
       this.bodyRenderer.setOffset(this.config.offset);
     }
 
-    if ((path === "radius" && this.config.shape === "cylinder") || (path === "shape" && value === "cylinder") || path === "height") {
-      this.bodyRenderer.setCylinder(this.config.radius, this.config.height);
+    if ((path.indexOf("orientation") !== -1 && this.config.shape === "cylinder") || (path === "radius" && this.config.shape === "cylinder") || (path === "shape" && value === "cylinder") || path === "height" || path === "segments") {
+      this.bodyRenderer.setCylinder(this.config.orientation, this.config.radius, this.config.height, this.config.segments);
       this.bodyRenderer.setOffset(this.config.offset);
     }
 

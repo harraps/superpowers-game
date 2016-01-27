@@ -11,8 +11,10 @@
       "sphere": "Sphere",
       "cylinder": "Cylinder"
     },
+    "orientation": "Orientation",
     "halfSize": "Half size",
     "radius": "Radius",
-    "height": "Height"
+    "height": "Height",
+    "segments": "Segments"
   }
 }

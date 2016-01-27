@@ -14,6 +14,16 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
 
     shape: { type: "enum", items: ["box", "sphere", "cylinder"], mutable: true },
 
+    orientation: {
+        mutable: true,
+        type: "hash",
+        properties: {
+            x: { type: "number", mutable: true },
+            y: { type: "number", mutable: true },
+            z: { type: "number", mutable: true }
+        }
+    },
+
     halfSize: {
       mutable: true,
       type: "hash",
@@ -25,7 +35,8 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
     },
 
     radius: { type: "number", min: 0, mutable: true },
-    height: { type: "number", min: 0, mutable: true }
+    height: { type: "number", min: 0, mutable: true },
+    segments: { type: "number", min: 3, mutable: true }
   };
 
   static create() {
@@ -34,9 +45,11 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
       fixedRotation: false,
       offset: { x: 0, y: 0, z: 0 },
       shape: "box",
+      orientation: { x: 0, y: 0, z: 0 },
       halfSize: { x: 0.5, y: 0.5, z: 0.5 },
       radius: 1,
-      height: 1
+      height: 1,
+      segments: 16
     };
   }
 
@@ -53,6 +66,14 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
       delete pub.offsetX;
       delete pub.offsetY;
       delete pub.offsetZ;
+    }
+
+    if( pub.orientation == null ){
+        pub.orientation = {
+            x: 0,
+            y: 0,
+            z: 0
+        };
     }
 
     // NOTE: halfSize was introduced in Superpowers 0.14
@@ -72,6 +93,7 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
     if (pub.shape == null) pub.shape = "box";
     if (pub.radius == null) pub.radius = 1;
     if (pub.height == null) pub.height  = 1;
+    if (pub.segments == null) pub.segments = 16;
 
     super(pub, CannonBodyConfig.schema);
   }

@@ -14,19 +14,20 @@ class CannonBodyMarker extends SupEngine.ActorComponent {
 
   setIsLayerActive(active: boolean) { if (this.mesh != null) this.mesh.visible = active; }
 
-  setBox(halfSize: any) {
+  setBox(orientation: any, halfSize: any) {
     if (this.mesh != null) this._clearRenderer();
 
     let geometry = new THREE.BoxGeometry(halfSize.x * 2, halfSize.y * 2, halfSize.z * 2);
     let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xf459e4, transparent: true, opacity: 0.2 });
     this.mesh = new THREE.Mesh(geometry, material);
+    let euler = Math.PI/180;
+    this.mesh.quaternion.setFromEuler(new THREE.Euler( orientation.x*euler, orientation.y*euler, orientation.z*euler ));
     this.actor.threeObject.add(this.mesh);
     this.mesh.updateMatrixWorld(false);
   }
 
   setSphere(radius: number) {
     if (this.mesh != null) this._clearRenderer();
-
     let geometry = new THREE.SphereGeometry(radius);
     let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xf459e4, transparent: true, opacity: 0.2 });
     this.mesh = new THREE.Mesh(geometry, material);
@@ -34,13 +35,14 @@ class CannonBodyMarker extends SupEngine.ActorComponent {
     this.mesh.updateMatrixWorld(false);
   }
 
-  setCylinder(radius: number, height: number) {
+  setCylinder(orientation: any, radius: number, height: number, segments: number) {
     if (this.mesh != null) this._clearRenderer();
 
-    let geometry = new THREE.CylinderGeometry(radius, radius, height);
+    let geometry = new THREE.CylinderGeometry(radius, radius, height, segments);
     let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xf459e4, transparent: true, opacity: 0.2 });
     this.mesh = new THREE.Mesh(geometry, material);
-    this.mesh.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+    let euler = Math.PI/180;
+    this.mesh.quaternion.setFromEuler(new THREE.Euler( orientation.x*euler, orientation.y*euler, orientation.z*euler ));
     this.actor.threeObject.add(this.mesh);
     this.mesh.updateMatrixWorld(false);
   }
