@@ -16,16 +16,14 @@ class CannonBodyMarker extends SupEngine.ActorComponent {
 
   setBox(orientation: any, halfSize: any) {
     if (this.mesh != null) this._clearRenderer();
-
     let geometry = new THREE.BoxGeometry(halfSize.x * 2, halfSize.y * 2, halfSize.z * 2);
     let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xf459e4, transparent: true, opacity: 0.2 });
     this.mesh = new THREE.Mesh(geometry, material);
-    let euler = Math.PI/180;
-    this.mesh.quaternion.setFromEuler(new THREE.Euler( orientation.x*euler, orientation.y*euler, orientation.z*euler ));
+    let radian = Math.PI/180;
+    this.mesh.quaternion.setFromEuler(new THREE.Euler(orientation.x*radian, orientation.y*radian, orientation.z*radian));
     this.actor.threeObject.add(this.mesh);
     this.mesh.updateMatrixWorld(false);
   }
-
   setSphere(radius: number) {
     if (this.mesh != null) this._clearRenderer();
     let geometry = new THREE.SphereGeometry(radius);
@@ -34,15 +32,13 @@ class CannonBodyMarker extends SupEngine.ActorComponent {
     this.actor.threeObject.add(this.mesh);
     this.mesh.updateMatrixWorld(false);
   }
-
   setCylinder(orientation: any, radius: number, height: number, segments: number) {
     if (this.mesh != null) this._clearRenderer();
-
     let geometry = new THREE.CylinderGeometry(radius, radius, height, segments);
     let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0xf459e4, transparent: true, opacity: 0.2 });
     this.mesh = new THREE.Mesh(geometry, material);
-    let euler = Math.PI/180;
-    this.mesh.quaternion.setFromEuler(new THREE.Euler( orientation.x*euler, orientation.y*euler, orientation.z*euler ));
+    let radian = Math.PI/180;
+    this.mesh.quaternion.setFromEuler(new THREE.Euler((orientation.x+90)*radian, orientation.y*radian, orientation.z*radian));
     this.actor.threeObject.add(this.mesh);
     this.mesh.updateMatrixWorld(false);
   }

@@ -5,6 +5,8 @@ export default class CannonBody extends SupEngine.ActorComponent {
   body: any;
   mass: number;
   fixedRotation: boolean;
+  group: number;
+  mask: number;
 
   actorPosition = new THREE.Vector3();
   actorOrientation = new THREE.Quaternion();
@@ -37,15 +39,18 @@ export default class CannonBody extends SupEngine.ActorComponent {
   setup(config: any) {
     this.mass = config.mass != null ? config.mass : 0;
     this.fixedRotation = config.fixedRotation != null ? config.fixedRotation : false;
+    this.group = config.group != null ? config.group : 1;
+    this.mask = config.mask != null ? config.mask : 1;
 
     this.actor.getGlobalPosition(this.actorPosition);
     this.actor.getGlobalOrientation(this.actorOrientation);
 
     this.body.mass = this.mass;
     this.body.type = this.mass === 0 ? (<any>window).CANNON.Body.STATIC : (<any>window).CANNON.Body.DYNAMIC;
-
     this.body.material = (<any>SupEngine).Cannon.World.defaultMaterial;
     this.body.fixedRotation = this.fixedRotation;
+    this.body.collisionFilterGroup = this.group;
+    this.body.collisionFilterMask = this.mask;
     this.body.updateMassProperties();
 
     // NOTE: config.offset was introduced in Superpowers 0.14
@@ -63,13 +68,13 @@ export default class CannonBody extends SupEngine.ActorComponent {
         z: config.offsetZ != null ? config.offsetZ : 0
       };
     }
-
     // config.orientation is introduced in this new version of Superpowers
+    let radian = Math.PI/180;
     if (config.orientation != null) {
         this.orientation = {
-            x: config.orientation.x,
-            y: config.orientation.y,
-            z: config.orientation.z
+            x: config.orientation.x * radian,
+            y: config.orientation.y * radian,
+            z: config.orientation.z * radian
         };
     } else {
         this.orientation = { x: 0, y: 0, z: 0 };
@@ -109,6 +114,7 @@ export default class CannonBody extends SupEngine.ActorComponent {
     }
     this.body.position.set(this.actorPosition.x, this.actorPosition.y, this.actorPosition.z);
     this.body.shapeOffsets[0].copy(this.offset);
+    this.body.shapeOrientations[0].setFromEuler(this.orientation.x, this.orientation.y, this.orientation.z);
     this.body.quaternion.set(this.actorOrientation.x, this.actorOrientation.y, this.actorOrientation.z, this.actorOrientation.w);
   }
 

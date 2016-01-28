@@ -27,23 +27,20 @@ export default class CannonBodyMarkerUpdater {
   destroy() { /* Ignore */ }
 
   config_setProperty(path: string, value: any) {
-    if ((path.indexOf("orientation") !== -1 && this.config.shape === "box") ||path.indexOf("halfSize") !== -1 || (path === "shape" && value === "box")) {
+    if ((path.indexOf("orientation") !== -1 && this.config.shape === "box") || path.indexOf("halfSize") !== -1 || (path === "shape" && value === "box")) {
       this.bodyRenderer.setBox(this.config.orientation, this.config.halfSize);
       this.bodyRenderer.setOffset(this.config.offset);
     }
-
-    if (path.indexOf("offset") !== -1) {
+    if ((path === "radius" && this.config.shape === "sphere") || (path === "shape" && value === "sphere")) {
+      this.bodyRenderer.setSphere(this.config.radius);
       this.bodyRenderer.setOffset(this.config.offset);
     }
-
     if ((path.indexOf("orientation") !== -1 && this.config.shape === "cylinder") || (path === "radius" && this.config.shape === "cylinder") || (path === "shape" && value === "cylinder") || path === "height" || path === "segments") {
       this.bodyRenderer.setCylinder(this.config.orientation, this.config.radius, this.config.height, this.config.segments);
       this.bodyRenderer.setOffset(this.config.offset);
     }
-
-    if ((path === "radius" && this.config.shape === "sphere") || (path === "shape" && value === "sphere")) {
-      this.bodyRenderer.setSphere(this.config.radius);
-      this.bodyRenderer.setOffset(this.config.offset);
+    if (path.indexOf("offset") !== -1) {
+        this.bodyRenderer.setOffset(this.config.offset);
     }
   }
 }

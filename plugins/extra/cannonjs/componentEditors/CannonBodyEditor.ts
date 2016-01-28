@@ -15,20 +15,31 @@ export default class CannonBodyEditor {
     this.editConfig = editConfig;
     this.tbody = tbody;
     this.fields = {};
+
     let massRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.mass"));
     this.fields["mass"] = SupClient.table.appendNumberField(massRow.valueCell, config.mass, { min: 0 });
-    this.fields["mass"].addEventListener(
-      "change", (event) => {
+    this.fields["mass"].addEventListener("change", (event) => {
         this.editConfig("setProperty", "mass", parseFloat((<HTMLInputElement>event.target).value));
-      });
-
+    });
     let fixedRotationRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.fixedRotation"));
     this.fields["fixedRotation"] = SupClient.table.appendBooleanField(fixedRotationRow.valueCell, config.fixedRotation);
     this.fields["fixedRotation"].addEventListener("click", (event) => {
-      this.editConfig("setProperty", "fixedRotation", (<HTMLInputElement>event.target).checked);
+        this.editConfig("setProperty", "fixedRotation", (<HTMLInputElement>event.target).checked);
+    });
+    let groupRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.group"));
+    this.fields["group"] = SupClient.table.appendNumberField(groupRow.valueCell, config.group);
+    this.fields["group"].addEventListener("change", (event) => {
+        this.editConfig("setProperty", "group", parseInt((<HTMLInputElement>event.target).value));
+    });
+    let maskRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.mask"));
+    this.fields["mask"] = SupClient.table.appendNumberField(maskRow.valueCell, config.mask);
+    this.fields["mask"].addEventListener("change", (event) => {
+        this.editConfig("setProperty", "mask", parseInt((<HTMLInputElement>event.target).value));
     });
 
+    // display a gray bar with "shape" written in it
     SupClient.table.appendHeader(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.shape"));
+
     let shapeTypeRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.shapeType"));
     this.fields["shape"] = SupClient.table.appendSelectBox(shapeTypeRow.valueCell, {
       "box": SupClient.i18n.t("componentEditors:CannonBody.shapeOptions.box"),
@@ -55,6 +66,7 @@ export default class CannonBodyEditor {
         this.editConfig("setProperty", "offset.z", parseFloat((<HTMLInputElement>event.target).value));
     });
 
+    // Box / Cylinder
     this.orientationRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.orientation"));
     let orientationFields = SupClient.table.appendNumberFields(this.orientationRow.valueCell, [ config.orientation.x, config.orientation.y, config.orientation.z ], { min: -360, max: 360 });
     this.fields["orientation.x"] = orientationFields[0];
@@ -93,12 +105,12 @@ export default class CannonBodyEditor {
       this.editConfig("setProperty", "radius", parseFloat((<HTMLInputElement>event.target).value));
     });
 
+    // Cylinder
     this.heightRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.height"));
     this.fields["height"] = SupClient.table.appendNumberField(this.heightRow.valueCell, config.height, { min: 0 });
     this.fields["height"].addEventListener("change", (event) => {
       this.editConfig("setProperty", "height", parseFloat((<HTMLInputElement>event.target).value));
     });
-
     this.segmentsRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.segments"));
     this.fields["segments"] = SupClient.table.appendNumberField(this.segmentsRow.valueCell, config.segments, { min: 3 });
     this.fields["segments"].addEventListener("change", (event) => {

@@ -2,6 +2,11 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
   static schema: SupCore.Data.Schema = {
     mass: { type: "number", min: 0, mutable: true },
     fixedRotation: { type: "boolean", mutable: true },
+    group: { type: "number", mutable: true },
+    mask: { type: "number", mutable: true },
+
+    shape: { type: "enum", items: ["box", "sphere", "cylinder"], mutable: true },
+
     offset: {
       mutable: true,
       type: "hash",
@@ -11,9 +16,6 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
         z: { type: "number", mutable: true },
       }
     },
-
-    shape: { type: "enum", items: ["box", "sphere", "cylinder"], mutable: true },
-
     orientation: {
         mutable: true,
         type: "hash",
@@ -33,7 +35,6 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
         z: { type: "number", min: 0, mutable: true },
       }
     },
-
     radius: { type: "number", min: 0, mutable: true },
     height: { type: "number", min: 0, mutable: true },
     segments: { type: "number", min: 3, mutable: true }
@@ -54,6 +55,10 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
   }
 
   constructor(pub: any) {
+
+    if (pub.group == null) pub.group = 1;
+    if (pub.mask == null) pub.mask = 1;
+
     // NOTE: offset was introduced in Superpowers 0.14
     // to merge offsetX, offsetY and offsetZ
     if (pub.offsetX != null) {
