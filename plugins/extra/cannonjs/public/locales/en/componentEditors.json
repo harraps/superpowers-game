@@ -12,8 +12,8 @@
       "sphere": "Sphere",
       "cylinder": "Cylinder"
     },
-    "offset": "Offset",
-    "orientation": "Orientation",
+    "positionOffset": "Position Offset",
+    "orientationOffset": "Orientation Offset",
     "halfSize": "Half size",
     "radius": "Radius",
     "height": "Height",

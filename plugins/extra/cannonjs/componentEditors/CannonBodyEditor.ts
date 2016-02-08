@@ -4,7 +4,7 @@ export default class CannonBodyEditor {
   fields: { [name: string]: HTMLInputElement|HTMLSelectElement };
   projectClient: SupClient.ProjectClient;
   editConfig: any;
-  orientationRow: SupClient.table.RowParts;
+  orientationOffsetRow: SupClient.table.RowParts;
   halfSizeRow: SupClient.table.RowParts;
   radiusRow: SupClient.table.RowParts;
   heightRow: SupClient.table.RowParts;
@@ -51,35 +51,37 @@ export default class CannonBodyEditor {
       this.editConfig("setProperty", "shape", (<HTMLInputElement>event.target).value);
     });
 
-    let offsetRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.offset"));
-    let offsetFields = SupClient.table.appendNumberFields(offsetRow.valueCell, [ config.offset.x, config.offset.y, config.offset.z ]);
-    this.fields["offset.x"] = offsetFields[0];
-    this.fields["offset.y"] = offsetFields[1];
-    this.fields["offset.z"] = offsetFields[2];
-    this.fields["offset.x"].addEventListener("change", (event) => {
-        this.editConfig("setProperty", "offset.x", parseFloat((<HTMLInputElement>event.target).value));
+    let positionOffsetRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.positionOffset"));
+    let positionOffsetFields = SupClient.table.appendNumberFields(positionOffsetRow.valueCell, [ config.positionOffset.x, config.positionOffset.y, config.positionOffset.z ]);
+    this.fields["positionOffset.x"] = positionOffsetFields[0];
+    this.fields["positionOffset.y"] = positionOffsetFields[1];
+    this.fields["positionOffset.z"] = positionOffsetFields[2];
+
+    this.fields["positionOffset.x"].addEventListener("change", (event) => {
+        this.editConfig("setProperty", "positionOffset.x", parseFloat((<HTMLInputElement>event.target).value));
     });
-    this.fields["offset.y"].addEventListener("change", (event) => {
-        this.editConfig("setProperty", "offset.y", parseFloat((<HTMLInputElement>event.target).value));
+    this.fields["positionOffset.y"].addEventListener("change", (event) => {
+        this.editConfig("setProperty", "positionOffset.y", parseFloat((<HTMLInputElement>event.target).value));
     });
-    this.fields["offset.z"].addEventListener("change", (event) => {
-        this.editConfig("setProperty", "offset.z", parseFloat((<HTMLInputElement>event.target).value));
+    this.fields["positionOffset.z"].addEventListener("change", (event) => {
+        this.editConfig("setProperty", "positionOffset.z", parseFloat((<HTMLInputElement>event.target).value));
     });
 
     // Box / Cylinder
-    this.orientationRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.orientation"));
-    let orientationFields = SupClient.table.appendNumberFields(this.orientationRow.valueCell, [ config.orientation.x, config.orientation.y, config.orientation.z ], { min: -360, max: 360 });
-    this.fields["orientation.x"] = orientationFields[0];
-    this.fields["orientation.y"] = orientationFields[1];
-    this.fields["orientation.z"] = orientationFields[2];
-    this.fields["orientation.x"].addEventListener("change", (event) => {
-        this.editConfig("setProperty", "orientation.x", parseFloat((<HTMLInputElement>event.target).value));
+    this.orientationOffsetRow = SupClient.table.appendRow(this.tbody, SupClient.i18n.t("componentEditors:CannonBody.orientationOffset"));
+    let orientationOffsetFields = SupClient.table.appendNumberFields(this.orientationOffsetRow.valueCell, [ config.orientationOffset.x, config.orientationOffset.y, config.orientationOffset.z ], { min: -360, max: 360 });
+    this.fields["orientationOffset.x"] = orientationOffsetFields[0];
+    this.fields["orientationOffset.y"] = orientationOffsetFields[1];
+    this.fields["orientationOffset.z"] = orientationOffsetFields[2];
+
+    this.fields["orientationOffset.x"].addEventListener("change", (event) => {
+        this.editConfig("setProperty", "orientationOffset.x", parseFloat((<HTMLInputElement>event.target).value));
     });
-    this.fields["orientation.y"].addEventListener("change", (event) => {
-      this.editConfig("setProperty", "orientation.y", parseFloat((<HTMLInputElement>event.target).value));
+    this.fields["orientationOffset.y"].addEventListener("change", (event) => {
+      this.editConfig("setProperty", "orientationOffset.y", parseFloat((<HTMLInputElement>event.target).value));
     });
-    this.fields["orientation.z"].addEventListener("change", (event) => {
-      this.editConfig("setProperty", "orientation.z", parseFloat((<HTMLInputElement>event.target).value));
+    this.fields["orientationOffset.z"].addEventListener("change", (event) => {
+      this.editConfig("setProperty", "orientationOffset.z", parseFloat((<HTMLInputElement>event.target).value));
     });
 
     // Box
@@ -123,21 +125,21 @@ export default class CannonBodyEditor {
   updateShapeInput(shape: string) {
     switch (shape) {
       case "box":
-        this.orientationRow.row.hidden = false;
+        this.orientationOffsetRow.row.hidden = false;
         this.halfSizeRow.row.hidden = false;
         this.radiusRow.row.hidden = true;
         this.heightRow.row.hidden = true;
         this.segmentsRow.row.hidden = true;
         break;
       case "sphere":
-        this.orientationRow.row.hidden = true;
+        this.orientationOffsetRow.row.hidden = true;
         this.halfSizeRow.row.hidden = true;
         this.radiusRow.row.hidden = false;
         this.heightRow.row.hidden = true;
         this.segmentsRow.row.hidden = true;
         break;
       case "cylinder":
-        this.orientationRow.row.hidden = false;
+        this.orientationOffsetRow.row.hidden = false;
         this.halfSizeRow.row.hidden = true;
         this.radiusRow.row.hidden = false;
         this.heightRow.row.hidden = false;

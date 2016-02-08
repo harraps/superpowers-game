@@ -7,7 +7,7 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
 
     shape: { type: "enum", items: ["box", "sphere", "cylinder"], mutable: true },
 
-    offset: {
+    positionOffset: {
       mutable: true,
       type: "hash",
       properties: {
@@ -16,7 +16,7 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
         z: { type: "number", mutable: true },
       }
     },
-    orientation: {
+    orientationOffset: {
         mutable: true,
         type: "hash",
         properties: {
@@ -44,9 +44,9 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
     return {
       mass: 0,
       fixedRotation: false,
-      offset: { x: 0, y: 0, z: 0 },
       shape: "box",
-      orientation: { x: 0, y: 0, z: 0 },
+      positionOffset: { x: 0, y: 0, z: 0 },
+      orientationOffset: { x: 0, y: 0, z: 0 },
       halfSize: { x: 0.5, y: 0.5, z: 0.5 },
       radius: 1,
       height: 1,
@@ -61,24 +61,21 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
 
     // NOTE: offset was introduced in Superpowers 0.14
     // to merge offsetX, offsetY and offsetZ
-    if (pub.offsetX != null) {
-      pub.offset = {
+    if (pub.offset != null) {
+        pub.positionOffset = pub.offset;
+    } else if (pub.offsetX != null) {
+      pub.positionOffset = {
         x: pub.offsetX,
         y: pub.offsetY,
         z: pub.offsetZ,
       };
-
       delete pub.offsetX;
       delete pub.offsetY;
       delete pub.offsetZ;
     }
 
-    if( pub.orientation == null ){
-        pub.orientation = {
-            x: 0,
-            y: 0,
-            z: 0
-        };
+    if( pub.orientationOffset == null ){
+        pub.orientationOffset = { x: 0, y: 0, z: 0 };
     }
 
     // NOTE: halfSize was introduced in Superpowers 0.14
@@ -89,7 +86,6 @@ export default class CannonBodyConfig extends SupCore.Data.Base.ComponentConfig 
         y: pub.halfHeight,
         z: pub.halfDepth
       };
-
       delete pub.halfWidth;
       delete pub.halfHeight;
       delete pub.halfDepth;

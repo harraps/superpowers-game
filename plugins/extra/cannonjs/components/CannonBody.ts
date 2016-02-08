@@ -14,8 +14,8 @@ export default class CannonBody extends SupEngine.ActorComponent {
   shape: string;
 
   // attributes common to each shape
-  offset: { x: number; y: number; z: number; };
-  orientation: { x: number; y: number; z: number };
+  positionOffset: { x: number; y: number; z: number; };
+  orientationOffset: { x: number; y: number; z: number };
 
   // Box
   halfSize: { x: number; y: number; z: number; };
@@ -55,30 +55,28 @@ export default class CannonBody extends SupEngine.ActorComponent {
 
     // NOTE: config.offset was introduced in Superpowers 0.14
     // to merge config.offsetX, .offsetY and .offsetZ
-    if (config.offset != null) {
-      this.offset = {
-        x: config.offset.x,
-        y: config.offset.y,
-        z: config.offset.z
-      };
+    if (config.positionOffset != null) {
+        this.positionOffset = config.positionOffset;
+    } else if (config.offset != null) {
+      this.positionOffset = config.offset;
     } else {
-      this.offset = {
+      this.positionOffset = {
         x: config.offsetX != null ? config.offsetX : 0,
         y: config.offsetY != null ? config.offsetY : 0,
         z: config.offsetZ != null ? config.offsetZ : 0
       };
     }
-    // config.orientation is introduced in this new version of Superpowers
-    let radian = Math.PI/180;
-    if (config.orientation != null) {
-        this.orientation = {
-            x: config.orientation.x * radian,
-            y: config.orientation.y * radian,
-            z: config.orientation.z * radian
-        };
+    // config.orientation is introduced in the version 0.20 of Superpowers
+    if (config.orientationOffset != null) {
+        this.orientationOffset = config.orientationOffset;
     } else {
-        this.orientation = { x: 0, y: 0, z: 0 };
+        this.orientationOffset = { x: 0, y: 0, z: 0 };
     }
+    // we correct the angle
+    let radian = Math.PI/180;
+    this.orientationOffset.x *= radian;
+    this.orientationOffset.y *= radian;
+    this.orientationOffset.z *= radian;
 
     this.shape = config.shape;
     switch (this.shape) {
@@ -86,11 +84,7 @@ export default class CannonBody extends SupEngine.ActorComponent {
         // NOTE: config.halfSize was introduced in Superpowers 0.14
         // to merge config.halfWidth, .halfHeight and .halfDepth
         if (config.halfSize != null) {
-          this.halfSize = {
-            x: config.halfSize.x,
-            y: config.halfSize.y,
-            z: config.halfSize.z
-          };
+          this.halfSize = config.halfSize;
         } else {
           this.halfSize = {
             x: config.halfWidth != null ? config.halfWidth : 0.5,
@@ -113,8 +107,8 @@ export default class CannonBody extends SupEngine.ActorComponent {
         break;
     }
     this.body.position.set(this.actorPosition.x, this.actorPosition.y, this.actorPosition.z);
-    this.body.shapeOffsets[0].copy(this.offset);
-    this.body.shapeOrientations[0].setFromEuler(this.orientation.x, this.orientation.y, this.orientation.z);
+    this.body.shapeOffsets[0].copy(this.positionOffset);
+    this.body.shapeOrientations[0].setFromEuler(this.orientationOffset.x, this.orientationOffset.y, this.orientationOffset.z);
     this.body.quaternion.set(this.actorOrientation.x, this.actorOrientation.y, this.actorOrientation.z, this.actorOrientation.w);
   }
 
